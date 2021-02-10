@@ -29,7 +29,7 @@ class UrlsCollector:
         else:
             for page_number in range(page_start, page_end):
                 if self.is_page_exist(page_start):
-                    urls.append(self.first_url.format(page_number=page_start))
+                    urls.append(self.first_url.format(page_number=page_number))
                 else:
                     raise requests.exceptions.HTTPError(f'Url on {page_start} page not exist')
             return urls
