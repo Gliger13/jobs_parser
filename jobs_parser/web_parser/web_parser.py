@@ -51,7 +51,7 @@ class WebParser:
         parse_result = []
         for url_number, url in enumerate(self.urls):
             page = self._get_page(url)
-            self._save_page(url, url_number, page)
+            self._save_page(url, page)
             user_content = self._user_content(page)
             parse_result.append(self._parse_page(user_content))
         return parse_result
