@@ -22,24 +22,29 @@ class WebParser:
             source_dir_path = os.path.abspath(os.path.curdir)
             return os.path.join(source_dir_path, dir_name)
 
+    def filename_path(self, url):
+        filename = f"{hashlib.md5(url.encode('utf-8')).hexdigest()}.html"
+        return os.path.join(self.path_to_save, filename)
+
     def _get_page(self, url):
-        page = requests.get(url, headers=self.request_headers)
-        page.raise_for_status()
-        return page
+        page_path = self.filename_path(url)
+        if os.path.exists(page_path):
+            return
+        else:
+            page = requests.get(url, headers=self.request_headers)
+            page.raise_for_status()
+            return page.text
 
     def _save_page(self, url, page):
         if not os.path.exists(self.path_to_save):
             os.mkdir(self.path_to_save)
 
-        filename = f"{hashlib.md5(url.encode('utf-8')).hexdigest()}.html"
-        file_path = os.path.join(self.path_to_save, filename)
+        if not os.path.exists(self.filename_path(url)):
+            with open(self.filename_path(url), 'w') as file:
+                file.write(page)
 
-        with open(file_path, 'w') as file:
-            file.write(page.text)
-
-    @staticmethod
-    def _user_content(page):
-        return BeautifulSoup(page.text, 'html.parser').body.get_text()
+    def _user_content(self, url):
+        return BeautifulSoup(open(self.filename_path(url)), 'html.parser').body.get_text()
 
     def _parse_page(self, user_content: str):
         matched = []
@@ -52,6 +57,6 @@ class WebParser:
         for url_number, url in enumerate(self.urls):
             page = self._get_page(url)
             self._save_page(url, page)
-            user_content = self._user_content(page)
+            user_content = self._user_content(url)
             parse_result.append(self._parse_page(user_content))
         return parse_result
