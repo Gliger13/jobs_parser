@@ -16,15 +16,8 @@ if __name__ == '__main__':
     word_to_find = [r'python', r'linux', r'flask']
 
     url_collector = urls_collector.UrlsCollector(first_page_url_template, request_headers=request_headers)
-    # Get urls of all pages
-    # url_pages = url_collector.valid_url_pages()
-    # all_urls = []
-    # for url_page in url_pages:
-    #     all_urls.extend(
-    #         url_collector.urls_from_page_by_class(url_page, 'bloko-link HH-LinkModifier')
-    #     )
+    url_pages = url_collector.valid_url_pages()
 
-    # Get url only for one page
     all_urls = url_collector.urls_from_page_by_class(
         'https://rabota.by/search/vacancy?text=Python&page=39',
         'bloko-link HH-LinkModifier'
