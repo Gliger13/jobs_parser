@@ -1,0 +1,12 @@
+# Git files
+.git/
+
+# Virtual environment
+venv/
+
+# Byte-compiled
+__pycache__/
+
+# Distribution / packaging
+*.spec
+.idea/
