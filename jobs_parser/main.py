@@ -14,14 +14,14 @@ if __name__ == '__main__':
     first_page_url_template = "https://rabota.by/search/vacancy?text=Python&page={page_number}"
     request_headers = {'user-agent': 'job_parser/0.0.0'}
     word_to_find = [r'python', r'linux', r'flask']
+    block_class_with_links = 'bloko-link HH-LinkModifier'
 
     url_collector = urls_collector.UrlsCollector(first_page_url_template, request_headers=request_headers)
-    url_pages = url_collector.valid_url_pages()
+    url_pages = url_collector.valid_url_pages(0, 2)
 
-    all_urls = url_collector.urls_from_page_by_class(
-        'https://rabota.by/search/vacancy?text=Python&page=39',
-        'bloko-link HH-LinkModifier'
-    )
+    all_urls = []
+    for url_page in url_pages:
+        all_urls.extend(url_collector.urls_from_page_by_class(url_page, block_class_with_links))
 
     spider = web_parser.WebParser([r'Python', r'linux', r'flask'], all_urls, request_headers=request_headers)
     result = spider.parse()
