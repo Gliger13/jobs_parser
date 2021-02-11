@@ -6,11 +6,12 @@ from web_parser.urls_collector import UrlsCollector
 
 class TestUrlsCollector:
     def setup(self):
-        start_url = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
-        headers = {'user-agent': 'job_parser/0.0.0'}
+        self.start_url = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
+        self.headers = {'user-agent': 'job_parser/0.0.0'}
+        self.block_class = 'bloko-link HH-LinkModifier'
         self.urls_collector = UrlsCollector(
-            start_url,
-            request_headers=headers
+            self.start_url,
+            request_headers=self.headers
         )
 
     def test_page_exist(self):
@@ -28,5 +29,8 @@ class TestUrlsCollector:
 
     def test_urls_from_page_by_class(self):
         url = "https://rabota.by/search/vacancy?&text=python&page=0"
-        block_class = 'bloko-link HH-LinkModifier'
-        assert len(self.urls_collector.urls_from_page_by_class(url, block_class)) == 50
+        assert len(self.urls_collector.urls_from_page_by_class(url, self.block_class)) == 50
+
+    def test_no_results_by_key(self):
+        url = 'https://rabota.by/search/vacancy?text=shotgunFFFFFF&page={page_number}'
+        assert not self.urls_collector.urls_from_page_by_class(url, self.block_class)
