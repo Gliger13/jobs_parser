@@ -13,7 +13,7 @@ def average_num_of_occur(parsing_result, word):
 
 if __name__ == '__main__':
     first_paginator_url_template = "https://rabota.by/search/vacancy?text=Python&page={page_number}"
-    request_headers = {'user-agent': 'job_parser/0.0.0'}
+    request_headers = {'user-agent': 'job_parser/0.1.0'}
     word_to_find = [r'python', r'linux', r'flask']
     block_link_class = 'bloko-link HH-LinkModifier'
 

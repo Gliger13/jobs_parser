@@ -3,7 +3,7 @@ from web_parser.web_parser import WebParser
 
 class TestWebParser:
     def setup(self):
-        headers = {'user-agent': 'job_parser/0.0.0'}
+        headers = {'user-agent': 'job_parser/0.1.0'}
         self.web_parser = WebParser(
             [r'Python'],
             ['https://rabota.by/vacancy/41569979?query=python'],

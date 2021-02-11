@@ -3,7 +3,7 @@ from web_parser.page_manager import Page, Pages
 
 class TestPage:
     def setup(self):
-        self.request_headers = {'user-agent': 'job_parser/0.0.0'}
+        self.request_headers = {'user-agent': 'job_parser/0.1.0'}
 
     def test_is_page_exist(self):
         assert Page('https://rabota.by/', self.request_headers).is_page_exist()
@@ -14,7 +14,7 @@ class TestPage:
 
 class TestPages:
     def setup(self):
-        self.request_headers = {'user-agent': 'job_parser/0.0.0'}
+        self.request_headers = {'user-agent': 'job_parser/0.1.0'}
         self.urls = ['https://rabota.by/', 'https://google.com/']
         self.url_with_404 = 'http://google.com/404'
 

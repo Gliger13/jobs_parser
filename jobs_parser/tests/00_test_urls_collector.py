@@ -7,7 +7,7 @@ from web_parser.urls_collector import UrlsCollector, PaginatorUrlsCollector
 class TestPaginatorUrlsCollector:
     def setup(self):
         self.start_paginator_template = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
-        self.headers = {'user-agent': 'job_parser/0.0.0'}
+        self.headers = {'user-agent': 'job_parser/0.1.0'}
         self.paginator_urls_collector = PaginatorUrlsCollector(self.start_paginator_template, self.headers)
 
     def test_valid_paginator_urls(self):
@@ -20,7 +20,7 @@ class TestPaginatorUrlsCollector:
 
 class TestUrlsCollector:
     def setup(self):
-        headers = {'user-agent': 'job_parser/0.0.0'}
+        headers = {'user-agent': 'job_parser/0.1.0'}
         start_paginator_template = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
 
         paginator_urls_collector = PaginatorUrlsCollector(start_paginator_template, headers)
