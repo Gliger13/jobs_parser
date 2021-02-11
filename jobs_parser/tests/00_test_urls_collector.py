@@ -1,36 +1,36 @@
 import pytest
 import requests
 
-from web_parser.urls_collector import UrlsCollector
+from web_parser.urls_collector import UrlsCollector, PaginatorUrlsCollector
+
+
+class TestPaginatorUrlsCollector:
+    def setup(self):
+        self.start_paginator_template = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
+        self.headers = {'user-agent': 'job_parser/0.0.0'}
+        self.paginator_urls_collector = PaginatorUrlsCollector(self.start_paginator_template, self.headers)
+
+    def test_valid_paginator_urls(self):
+        assert len(self.paginator_urls_collector.valid_paginator_urls(0, 3)) == 3
+
+    def test_not_valid_url_pages(self):
+        with pytest.raises(requests.exceptions.HTTPError):
+            self.paginator_urls_collector.valid_paginator_urls(page_start=150, page_end=200)
 
 
 class TestUrlsCollector:
     def setup(self):
-        self.start_url = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
-        self.headers = {'user-agent': 'job_parser/0.0.0'}
-        self.block_class = 'bloko-link HH-LinkModifier'
-        self.urls_collector = UrlsCollector(
-            self.start_url,
-            request_headers=self.headers
-        )
+        headers = {'user-agent': 'job_parser/0.0.0'}
+        start_paginator_template = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
 
-    def test_page_exist(self):
-        assert self.urls_collector.is_page_exist(0)
+        paginator_urls_collector = PaginatorUrlsCollector(start_paginator_template, headers)
+        self.page_urls = paginator_urls_collector.page_urls(0, 2)
 
-    def test_page_not_exist(self):
-        assert not self.urls_collector.is_page_exist(10000)
-
-    def test_valid_url_pages(self):
-        assert len(self.urls_collector.valid_url_pages(page_start=0, page_end=2)) == 2
-
-    def test_not_valid_url_pages(self):
-        with pytest.raises(requests.exceptions.HTTPError):
-            self.urls_collector.valid_url_pages(page_start=150, page_end=200)
+        block_class = 'bloko-link HH-LinkModifier'
+        self.urls_collector = UrlsCollector(self.page_urls, headers, block_class)
 
     def test_urls_from_page_by_class(self):
-        url = "https://rabota.by/search/vacancy?&text=python&page=0"
-        assert len(self.urls_collector.urls_from_page_by_class(url, self.block_class)) == 50
+        assert len(self.urls_collector.urls_from_page_by_class(self.page_urls[0])) == 50
 
-    def test_no_results_by_key(self):
-        url = 'https://rabota.by/search/vacancy?text=shotgunFFFFFF&page={page_number}'
-        assert not self.urls_collector.urls_from_page_by_class(url, self.block_class)
+    def test_collect_urls(self):
+        assert len(self.urls_collector.collect_urls()) == 100
