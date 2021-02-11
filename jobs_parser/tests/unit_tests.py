@@ -49,12 +49,6 @@ class TestWebParser(unittest.TestCase):
         file_path = os.path.join(self.web_parser.path_to_save, '8ffdefbdec956b595d257f0aaeefd623.html')
         self.assertEqual(os.path.exists(file_path), True)
 
-    def test_user_content(self):
-        page = namedtuple('page', 'text')(
-            "<head>abasaa</head><body><p1>Correct text</p1><script>pass</script></body>"
-        )
-        self.assertEqual(self.web_parser._user_content(page), 'Correct text')
-
     def test_page_parser(self):
         self.assertEqual(self.web_parser._parse_page('python Pythonss Pnton python'), ['python', 'Python', 'python'])
 
