@@ -39,4 +39,4 @@ class Pages:
         return all(map(Page.is_page_exist, [Page(url, self.request_headers) for url in self.urls]))
 
     def get_files(self):
-        return [Page(url, self.request_headers).page_file for url in self.urls]
+        return [Page(url, self.request_headers).page_file() for url in self.urls]
