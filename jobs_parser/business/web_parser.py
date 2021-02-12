@@ -2,7 +2,7 @@ import re
 
 from bs4 import BeautifulSoup
 
-from web_parser.page_manager import Pages
+from core.page_manager import Pages
 
 
 class WebParser:

@@ -1,6 +1,6 @@
 import requests
 
-from web_parser.file_manager import PageFile
+from core.file_manager import PageFile
 
 
 class Page:

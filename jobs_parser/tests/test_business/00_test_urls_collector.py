@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-from web_parser.urls_collector import UrlsCollector, PaginatorUrlsCollector
+from business.urls_collector import PaginatorUrlsCollector, UrlsCollector
 
 
 class TestPaginatorUrlsCollector:

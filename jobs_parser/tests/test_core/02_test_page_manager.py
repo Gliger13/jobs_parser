@@ -1,4 +1,4 @@
-from web_parser.page_manager import Page, Pages
+from core.page_manager import Page, Pages
 
 
 class TestPage:

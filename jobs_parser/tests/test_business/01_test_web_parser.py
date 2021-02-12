@@ -1,4 +1,4 @@
-from web_parser.web_parser import WebParser
+from business.web_parser import WebParser
 
 
 class TestWebParser:

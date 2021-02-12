@@ -3,7 +3,7 @@ import itertools
 import requests
 from bs4 import BeautifulSoup
 
-from web_parser.page_manager import Page, Pages
+from core.page_manager import Pages, Page
 
 
 class PaginatorUrlsCollector:

@@ -1,5 +1,5 @@
-from web_parser import web_parser
-from web_parser.urls_collector import PaginatorUrlsCollector, UrlsCollector
+from business.urls_collector import UrlsCollector, PaginatorUrlsCollector
+from business.web_parser import WebParser
 
 
 def amount_of_words(parsing_result, word):
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     urls_collector = UrlsCollector(paginator_urls, request_headers, block_link_class)
     urls_to_parse = urls_collector.collect_urls()
 
-    spider = web_parser.WebParser([r'Python', r'linux', r'flask'], urls_to_parse, request_headers)
+    spider = WebParser([r'Python', r'linux', r'flask'], urls_to_parse, request_headers)
     results = spider.parse()
 
     print(f"Amount of occurrences of a word Linux per vacancy page: {amount_of_words(results, 'Linux')}")
