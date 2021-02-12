@@ -2,34 +2,61 @@ from business.urls_collector import UrlsCollector, PaginatorUrlsCollector
 from business.web_parser import WebParser
 
 
-def amount_of_words(parsing_result, word):
-    return [page_result.count(word) for page_result in parsing_result]
+def parse_required(func):
+    def wrapper(self, *args, **kwargs):
+        if not self.parse_results:
+            self.parse()
+        return func(self, *args, **kwargs)
+    return wrapper
 
 
-def average_num_of_occur(parsing_result, word):
-    num_of_words = amount_of_words(parsing_result, word)
-    return sum(num_of_words) / len(num_of_words)
+class App:
+    def __init__(
+            self, first_paginator_url_template, block_link_class, words_to_find, *,
+            request_headers=None, start_page=None, end_page=None
+    ):
+        self.first_paginator_url_template = first_paginator_url_template
+        self.block_link_class = block_link_class
+        self.words_to_find = words_to_find
+        self.request_headers = request_headers
+
+        self.start_page = start_page
+        self.end_page = end_page
+
+        self.parse_results = None
+
+    def _paginator_urls(self):
+        collector = PaginatorUrlsCollector(self.first_paginator_url_template, self.request_headers)
+        return collector.valid_paginator_urls(self.start_page, self.end_page)
+
+    def _urls_to_parse(self):
+        return UrlsCollector(self._paginator_urls(), self.request_headers, self.block_link_class).collect_urls()
+
+    def parse(self):
+        self.parse_results = WebParser(self.words_to_find, self._urls_to_parse(), self.request_headers).parse()
+        return self.parse_results
+
+    @parse_required
+    def num_of_word_occur_str(self):
+        text_template = "Amount of occurrences of a word {0} per vacancy page is {1}."
+        text = [text_template.format(w, num) for w, num in self.parse_results.count_words_occurrence().items()]
+        return '\n'.join(text)
+
+    @parse_required
+    def average_num_of_occur_str(self):
+        text_template = "Average number of occurrence of a word {0} per vacancy page is {1}."
+        text = [text_template.format(w, num) for w, num in self.parse_results.average_num_of_words_occur().items()]
+        return '\n'.join(text)
 
 
 if __name__ == '__main__':
-    first_paginator_url_template = "https://rabota.by/search/vacancy?text=Python&page={page_number}"
-    request_headers = {'user-agent': 'job_parser/0.1.0'}
-    word_to_find = [r'python', r'linux', r'flask']
-    block_link_class = 'bloko-link HH-LinkModifier'
+    paginator_url_template = "https://rabota.by/search/vacancy?text=Python&page={page_number}"
 
-    paginator_urls_collector = PaginatorUrlsCollector(first_paginator_url_template, request_headers)
-    paginator_urls = paginator_urls_collector.valid_paginator_urls(0, 2)
+    words = [r'python', r'linux', r'flask']
+    link_class = 'bloko-link HH-LinkModifier'
+    headers = {'user-agent': 'job_parser/0.1.0'}
 
-    urls_collector = UrlsCollector(paginator_urls, request_headers, block_link_class)
-    urls_to_parse = urls_collector.collect_urls()
-
-    spider = WebParser([r'Python', r'linux', r'flask'], urls_to_parse, request_headers)
-    results = spider.parse()
-
-    print(f"Amount of occurrences of a word Linux per vacancy page: {amount_of_words(results, 'Linux')}")
-    print(f"Amount of occurrences of a word Python per vacancy page: {amount_of_words(results, 'Python')}")
-    print(f"Amount of occurrences of a word Flask per vacancy page: {amount_of_words(results, 'Flask')}")
-
-    print(f"Average number of occurrence of a word Linux: {average_num_of_occur(results, 'Linux')}")
-    print(f"Average number of occurrence of a word Python: {average_num_of_occur(results, 'Python')}")
-    print(f"Average number of occurrence of a word Flask: {average_num_of_occur(results, 'Flask')}")
+    app = App(paginator_url_template, link_class, words, request_headers=headers, start_page=0, end_page=1)
+    app.parse()
+    print(app.average_num_of_occur_str())
+    print(app.num_of_word_occur_str())
