@@ -12,14 +12,17 @@ def parse_required(func):
 
 class App:
     def __init__(
-            self, first_paginator_url_template, block_link_class, words_to_find, *,
+            self, first_paginator_url_template, words_to_find, /,
+            block_link_class=None, classes_to_exclude=(),
             request_headers=None, start_page=None, end_page=None
     ):
         self.first_paginator_url_template = first_paginator_url_template
-        self.block_link_class = block_link_class
         self.words_to_find = words_to_find
-        self.request_headers = request_headers
 
+        self.block_link_class = block_link_class
+        self.classes_to_exclude = classes_to_exclude
+
+        self.request_headers = request_headers
         self.start_page = start_page
         self.end_page = end_page
 
@@ -33,7 +36,9 @@ class App:
         return UrlsCollector(self._paginator_urls(), self.request_headers, self.block_link_class).collect_urls()
 
     def parse(self):
-        self.parse_results = WebParser(self.words_to_find, self._urls_to_parse(), self.request_headers).parse()
+        self.parse_results = WebParser(
+            self._urls_to_parse(), self.words_to_find, self.classes_to_exclude, self.request_headers
+        ).parse()
         return self.parse_results
 
     @parse_required
@@ -51,12 +56,17 @@ class App:
 
 if __name__ == '__main__':
     paginator_url_template = "https://rabota.by/search/vacancy?text=Python&page={page_number}"
-
     words = [r'python', r'linux', r'flask']
+
     link_class = 'bloko-link HH-LinkModifier'
+    div_classes = ['recommended-vacancies', 'related-vacancies-wrapper']
     headers = {'user-agent': 'job_parser/0.1.0'}
 
-    app = App(paginator_url_template, link_class, words, request_headers=headers, start_page=0, end_page=1)
+    app = App(
+        paginator_url_template, words,
+        block_link_class=link_class, classes_to_exclude=div_classes,
+        request_headers=headers, start_page=0, end_page=1
+    )
     app.parse()
     print(app.average_num_of_occur_str())
     print(app.num_of_word_occur_str())
