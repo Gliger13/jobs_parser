@@ -1,5 +1,6 @@
 import hashlib
 import os
+import shutil
 import tempfile
 
 
@@ -17,6 +18,10 @@ class TmpManager:
         if not self._is_tmp_dir_exist():
             os.mkdir(self._tmp_dir_path)
         return self._tmp_dir_path
+
+    def clear_tmp_dir(self):
+        if self._is_tmp_dir_exist():
+            shutil.rmtree(self._tmp_dir_path)
 
 
 class PageFile(TmpManager):
