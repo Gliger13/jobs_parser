@@ -21,8 +21,8 @@ class WebParser:
     def _web_content(self, page_file):
         soup = BeautifulSoup(open(page_file.file_path), 'html.parser').body
         for block_class in self.classes_to_exclude:
-            if finded := soup.find('div', block_class):
-                finded.decompose()
+            if found := soup.find('div', block_class):
+                found.decompose()
         return soup
 
     def _findall_in_page(self, user_content: str):
