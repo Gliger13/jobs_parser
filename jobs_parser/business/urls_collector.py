@@ -11,14 +11,13 @@ class PaginatorUrlsCollector:
         self.first_url_template = first_url_template
         self.request_headers = request_headers
 
-    def count_max_valid_page(self):
-        page_number = 0
+    def count_max_valid_page(self, exist_page_number=0):
         while True:
-            page = Page(self.first_url_template.format(page_number=page_number), self.request_headers)
+            page = Page(self.first_url_template.format(page_number=exist_page_number), self.request_headers)
             if page.is_page_exist():
-                page_number += 1
+                exist_page_number += 1
             else:
-                return page_number
+                return exist_page_number
 
     def page_urls(self, page_start, page_end):
         return [self.first_url_template.format(page_number=page_number) for page_number in range(page_start, page_end)]
