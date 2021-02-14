@@ -1,5 +1,6 @@
 import pytest
 
+from business.urls_collector import UrlsCollector
 from business.web_parser import WebParser
 
 
@@ -30,3 +31,17 @@ class TestWebParser:
     def test__findall_in_page(self, test_input, expected):
         key, text = test_input
         assert WebParser([''], key)._findall_in_page(text) == expected
+
+    @pytest.mark.smoke
+    @pytest.mark.parametrize('test_input', [
+        ['https://rabota.by/search/vacancy?text=Python&page=0'],
+        ['https://rabota.by/search/vacancy?text=Python&page=0', 'https://rabota.by/search/vacancy?text=Python&page=1'],
+    ])
+    def test_average_occurrence(self, test_input, block_class, classes_to_exclude, request_headers):
+        urls = UrlsCollector(test_input, request_headers, block_class).collect_urls()
+        parse_results = WebParser(urls, ['Linux', 'Python', 'Flask'], classes_to_exclude, request_headers).parse()
+        average_results = parse_results.average_num_of_words_occur()
+        assert all([5 >= number >= 0.10 for number in average_results.values()])
+
+
+
