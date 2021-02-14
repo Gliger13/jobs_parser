@@ -18,3 +18,4 @@ jobs_parser/downloaded_pages
 
 # Coverage files
 .coverage
+.coveragerc
