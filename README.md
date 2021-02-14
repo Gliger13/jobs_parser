@@ -1,5 +1,5 @@
 # Jobs Parser
-![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg) ![Generic badge](https://img.shields.io/badge/python-3.8-blue.svg) ![Generic badge](https://img.shields.io/badge/coverage-77%25-yellow.svg) 
+![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg) ![Generic badge](https://img.shields.io/badge/python-3.8-blue.svg) ![Generic badge](https://img.shields.io/badge/coverage-74%25-yellow.svg) 
 
  - Jobs Parser that search job vacancies by a keyword (e.g python).
  - Check all pages
@@ -18,6 +18,15 @@
 git clone https://github.com/Gliger13/jobs_parser.git
 cd jobs_parser
 python setup.py install
+````
+
+## How to run
+Simple application that check first __**3**__ pages of 'https://rabota.by/search/vacancy?text=Python' and print:
+ - average number of occurrence of words 'python', 'linux', 'flask'
+ - number of occurrence of words 'python', 'linux', 'flask'
+````
+# Linux
+python jobs_parser/app.py
 ````
 
 ## Author

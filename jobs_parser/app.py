@@ -65,7 +65,7 @@ if __name__ == '__main__':
     app = App(
         paginator_url_template, words,
         block_link_class=link_class, classes_to_exclude=div_classes,
-        request_headers=headers, start_page=0, end_page=1
+        request_headers=headers, start_page=0, end_page=3
     )
     app.parse()
     print(app.average_num_of_occur_str())
