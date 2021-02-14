@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture
 def request_headers():
-    return {'user-agent': 'job_parser/0.1.0'}
+    return {'user-agent': 'job_parser/1.0.0'}
 
 
 @pytest.fixture

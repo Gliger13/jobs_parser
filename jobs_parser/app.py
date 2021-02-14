@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     link_class = 'bloko-link HH-LinkModifier'
     div_classes = ['recommended-vacancies', 'related-vacancies-wrapper']
-    headers = {'user-agent': 'job_parser/0.1.0'}
+    headers = {'user-agent': 'job_parser/1.0.0'}
 
     app = App(
         paginator_url_template, words,
