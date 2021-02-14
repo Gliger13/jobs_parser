@@ -1,6 +1,10 @@
+import logging
+
 import requests
 
 from core.file_manager import PageFile
+
+module_logger = logging.getLogger('jobs_parser')
 
 
 class Request:
@@ -12,19 +16,19 @@ class Request:
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError:
-            raise requests.exceptions.HTTPError(f'Page on {self.url} not exist.')
+            module_logger.warning(f'Request, HTTPError. Page with url {self.url} was skipped')
         except requests.exceptions.Timeout:
-            pass
+            module_logger.warning(f'Request, timeout. Page with url {self.url} was skipped')
         except requests.exceptions.TooManyRedirects:
-            pass
+            module_logger.warning(f'Request, too many redirects. Page with url {self.url} was skipped')
         except requests.exceptions.RequestException:
-            pass
+            module_logger.warning(f'RequestException. Page with url {self.url} was skipped')
 
     def get(self):
         return resp if (resp := requests.get(self.url, headers=self.headers)).ok else self.error_handling(resp)
 
     def head(self):
-        return resp if (resp := requests.head(self.url, headers=self.headers)).ok else self.error_handling(resp)
+        return requests.head(self.url, headers=self.headers)
 
 
 class Page:
@@ -33,11 +37,7 @@ class Page:
         self.request_headers = request_headers
 
     def is_page_exist(self):
-        try:
-            Request(self.url, self.request_headers).head()
-        except requests.exceptions.HTTPError:
-            return False
-        return True
+        return Request(self.url, self.request_headers).head().ok
 
     def get_page(self):
         return Request(self.url, self.request_headers).get().text if self.is_page_exist() else None
@@ -47,7 +47,11 @@ class Page:
         if not page_file.is_file_exist():
             page = Page(self.url, self.request_headers)
             data = page.get_page()
-            page_file.save_file(data)
+            if data:
+                page_file.save_file(data)
+                module_logger.debug(f'Page with url {self.url} has been downloaded and saved')
+        else:
+            module_logger.debug(f'Using the cache for the page with url {self.url}')
         return page_file
 
 
@@ -60,4 +64,5 @@ class Pages:
         return all(map(Page.is_page_exist, [Page(url, self.request_headers) for url in self.urls]))
 
     def get_files(self):
-        return [Page(url, self.request_headers).page_file() for url in self.urls]
+        page_files = [Page(url, self.request_headers).page_file() for url in self.urls]
+        return [page_file for page_file in page_files if page_file.is_file_exist()]

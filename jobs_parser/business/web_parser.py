@@ -1,9 +1,12 @@
+import logging
 import re
 
 from bs4 import BeautifulSoup
 
 from business.parse_results import ParseResult, ParseResults
 from core.page_manager import Pages
+
+module_logger = logging.getLogger('jobs_parser')
 
 
 class WebParser:
@@ -34,9 +37,15 @@ class WebParser:
     def _parse_file(self, page_file):
         user_content = self._user_content(page_file)
         matched = self._findall_in_page(user_content)
+        module_logger.debug(f'Page file parsed - {page_file.url}')
         return ParseResult(page_file.url, self.words_to_find, matched)
 
     def parse(self):
         pages = Pages(self.urls, self.request_headers)
         page_files = pages.get_files()
-        return ParseResults(self.urls, self.words_to_find, [self._parse_file(page_file) for page_file in page_files])
+        module_logger.info(f'Start scraping page files')
+        parse_results = ParseResults(
+            self.urls, self.words_to_find, [self._parse_file(page_file) for page_file in page_files]
+        )
+        module_logger.info(f'The scraping is over')
+        return parse_results
