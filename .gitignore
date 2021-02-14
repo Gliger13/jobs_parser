@@ -12,3 +12,9 @@ __pycache__/
 .idea/
 
 jobs_parser/downloaded_pages
+
+# Pytests cache
+.pytest_cache/
+
+# Coverage files
+.coverage
