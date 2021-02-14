@@ -3,11 +3,6 @@ import pytest
 from core.page_manager import Page, Pages
 
 
-@pytest.fixture
-def request_headers():
-    return {'user-agent': 'job_parser/0.1.0'}
-
-
 @pytest.fixture(params=[
     'https://rabota.by/', 'https://google.com/', 'https://yandex.ru/'
 ])

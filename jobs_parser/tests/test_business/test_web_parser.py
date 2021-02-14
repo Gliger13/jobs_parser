@@ -3,14 +3,6 @@ import pytest
 from business.web_parser import WebParser
 
 
-@pytest.fixture
-def additional_parser_params():
-    return {
-        'request_headers': {'user-agent': 'job_parser/0.1.0'},
-        'classes_to_exclude': ['recommended-vacancies', 'related-vacancies-wrapper']
-    }
-
-
 class TestWebParser:
     test_data = [
         ((['https://hh.ru/vacancy/40447045'], ['python', 'linux']), {'python': 3, 'linux': 0}),
@@ -20,9 +12,12 @@ class TestWebParser:
     ]
 
     @pytest.mark.parametrize('test_input,expected', test_data)
-    def test_parse_file(self, test_input, expected, additional_parser_params):
+    def test_parse_file(self, test_input, expected, classes_to_exclude, request_headers):
         urls, words_to_find = test_input
-        assert WebParser(urls, words_to_find, **additional_parser_params).parse().count_words_occurrence() == expected
+        assert WebParser(
+            urls, words_to_find,
+            classes_to_exclude=classes_to_exclude, request_headers=request_headers
+        ).parse().count_words_occurrence() == expected
 
     @pytest.mark.parametrize(
         'test_input,expected', [

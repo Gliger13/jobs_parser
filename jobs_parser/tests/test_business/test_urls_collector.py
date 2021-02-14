@@ -4,11 +4,6 @@ import requests
 from business.urls_collector import PaginatorUrlsCollector, UrlsCollector
 
 
-@pytest.fixture
-def request_headers():
-    return {'user-agent': 'job_parser/0.1.0'}
-
-
 @pytest.fixture(params=[
     'https://rabota.by/search/vacancy?text=Python&page={page_number}',
     'https://rabota.by/search/vacancy?text=ShotgunFFFFF&page={page_number}',
@@ -40,11 +35,6 @@ class TestPaginatorUrlsCollector:
     @pytest.mark.advance
     def test_count_max_valid_page(self, paginator_urls_collector):
         assert int(paginator_urls_collector.count_max_valid_page()) >= 0
-
-
-@pytest.fixture
-def block_class():
-    return 'bloko-link HH-LinkModifier'
 
 
 class TestUrlsCollector:
