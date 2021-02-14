@@ -3,6 +3,30 @@ import requests
 from core.file_manager import PageFile
 
 
+class Request:
+    def __init__(self, url, headers):
+        self.url = url
+        self.headers = headers
+
+    def error_handling(self, response):
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            raise requests.exceptions.HTTPError(f'Page on {self.url} not exist.')
+        except requests.exceptions.Timeout:
+            pass
+        except requests.exceptions.TooManyRedirects:
+            pass
+        except requests.exceptions.RequestException:
+            pass
+
+    def get(self):
+        return resp if (resp := requests.get(self.url, headers=self.headers)).ok else self.error_handling(resp)
+
+    def head(self):
+        return resp if (resp := requests.head(self.url, headers=self.headers)).ok else self.error_handling(resp)
+
+
 class Page:
     def __init__(self, url, request_headers=None):
         self.url = url
@@ -10,16 +34,13 @@ class Page:
 
     def is_page_exist(self):
         try:
-            requests.head(self.url, headers=self.request_headers).raise_for_status()
+            Request(self.url, self.request_headers).head()
         except requests.exceptions.HTTPError:
             return False
         return True
 
     def get_page(self):
-        if self.is_page_exist():
-            return requests.get(self.url, headers=self.request_headers).text
-        else:
-            raise requests.exceptions.HTTPError(f'Page on {self.url} not exist.')
+        return Request(self.url, self.request_headers).get().text if self.is_page_exist() else None
 
     def page_file(self):
         page_file = PageFile(self.url)
