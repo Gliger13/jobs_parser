@@ -17,6 +17,7 @@ def url_filename(request):
     return request.param
 
 
+@pytest.mark.smoke
 class TestPageFile:
     def test_filename(self, url_filename):
         url, correct_filename = url_filename

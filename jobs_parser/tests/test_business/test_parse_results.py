@@ -3,6 +3,7 @@ import pytest
 from business.parse_results import ParseResult
 
 
+@pytest.mark.smoke
 class TestParseResult:
     @pytest.mark.parametrize('test_input,expected', [
         (['Linux', 'linux', 'flask', 'Linux', 'Flask', 'Linux', 'Flask', 'linux', 'Flask'],
