@@ -31,7 +31,7 @@ class TestPage:
         assert not Page(url_with_404, request_headers).is_page_exist()
 
 
-@pytest.mark.advance
+@pytest.mark.critical
 class TestPages:
     def test_is_pages_exist(self, valid_urls, request_headers):
         assert Pages(valid_urls, request_headers).is_pages_exist()
