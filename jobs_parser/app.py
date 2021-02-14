@@ -48,13 +48,13 @@ class App:
 
     @parse_required
     def num_of_word_occur_str(self):
-        text_template = "Amount of occurrences of a word {0} per vacancy page is {1}."
+        text_template = "Amount of occurrences of the word {0} per vacancy page is {1}."
         text = [text_template.format(w, num) for w, num in self.parse_results.count_words_occurrence().items()]
         return '\n'.join(text)
 
     @parse_required
     def average_num_of_occur_str(self):
-        text_template = "Average number of occurrence of a word {0} per vacancy page is {1}."
+        text_template = "Average number of occurrence of the word {0} is {1}."
         text = [text_template.format(w, num) for w, num in self.parse_results.average_num_of_words_occur().items()]
         return '\n'.join(text)
 
