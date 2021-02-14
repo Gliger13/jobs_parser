@@ -1,10 +1,6 @@
-import logging
-
 from business.urls_collector import UrlsCollector, PaginatorUrlsCollector
 from business.web_parser import WebParser
 from settings import logger
-
-
 
 
 def parse_required(func):

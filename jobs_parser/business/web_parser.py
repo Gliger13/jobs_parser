@@ -42,6 +42,7 @@ class WebParser:
 
     def parse(self):
         pages = Pages(self.urls, self.request_headers)
+        module_logger.info(f'Fetching page files by downloading or using the cache')
         page_files = pages.get_files()
         module_logger.info(f'Start scraping page files')
         parse_results = ParseResults(
