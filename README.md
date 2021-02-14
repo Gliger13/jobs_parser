@@ -1,5 +1,5 @@
 # Jobs Parser
-![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg) ![Generic badge](https://img.shields.io/badge/python-3.8-blue.svg) ![Generic badge](https://img.shields.io/badge/coverage-74%25-yellow.svg) 
+![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg) ![Generic badge](https://img.shields.io/badge/python-3.8-blue.svg) ![Generic badge](https://img.shields.io/badge/coverage-85%25-green.svg) 
 
  - Jobs Parser that search job vacancies by a keyword (e.g python).
  - Check all pages
