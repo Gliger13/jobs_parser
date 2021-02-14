@@ -39,4 +39,4 @@ class WebParser:
     def parse(self):
         pages = Pages(self.urls, self.request_headers)
         page_files = pages.get_files()
-        return ParseResults(self.words_to_find, [self._parse_file(page_file) for page_file in page_files])
+        return ParseResults(self.urls, self.words_to_find, [self._parse_file(page_file) for page_file in page_files])

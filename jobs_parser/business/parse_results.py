@@ -24,7 +24,8 @@ class ParseResult:
 
 
 class ParseResults:
-    def __init__(self, words_to_find, parse_result):
+    def __init__(self, urls, words_to_find, parse_result):
+        self.urls = urls
         self.words_to_find = words_to_find
         self.parse_results = parse_result
 
@@ -35,7 +36,7 @@ class ParseResults:
         return {word: self.count_word_occurrence(word) for word in self.words_to_find}
 
     def average_num_of_word_occur(self, word):
-        return self.count_word_occurrence(word) / len(self.parse_results)
+        return self.count_word_occurrence(word) / len(self.urls)
 
     def average_num_of_words_occur(self):
         return {word: self.average_num_of_word_occur(word) for word in self.words_to_find}
