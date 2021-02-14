@@ -9,10 +9,12 @@ def request_headers():
     return {'user-agent': 'job_parser/0.1.0'}
 
 
-@pytest.fixture
-def paginator_urls_collector(request_headers):
-    start_paginator_template = 'https://rabota.by/search/vacancy?text=Python&page={page_number}'
-    return PaginatorUrlsCollector(start_paginator_template, request_headers)
+@pytest.fixture(params=[
+    'https://rabota.by/search/vacancy?text=Python&page={page_number}',
+    'https://rabota.by/search/vacancy?text=ShotgunFFFFF&page={page_number}',
+])
+def paginator_urls_collector(request, request_headers):
+    return PaginatorUrlsCollector(request.param, request_headers)
 
 
 @pytest.fixture(params=[
@@ -37,25 +39,29 @@ class TestPaginatorUrlsCollector:
 
     @pytest.mark.advance
     def test_count_max_valid_page(self, paginator_urls_collector):
-        start_page = 30
-        assert int(paginator_urls_collector.count_max_valid_page(start_page)) >= start_page
+        assert int(paginator_urls_collector.count_max_valid_page()) >= 0
 
 
 @pytest.fixture
-def page_urls(start_end_number, paginator_urls_collector):
-    page_start, page_end = start_end_number
-    return paginator_urls_collector.page_urls(page_start, page_end)
-
-
-@pytest.fixture
-def urls_collector(page_urls, request_headers):
-    block_class = 'bloko-link HH-LinkModifier'
-    return UrlsCollector(page_urls, request_headers, block_class)
+def block_class():
+    return 'bloko-link HH-LinkModifier'
 
 
 class TestUrlsCollector:
-    def test_urls_from_page_by_class(self, urls_collector, page_urls):
-        assert len(urls_collector.urls_from_page_by_class(page_urls[0])) == 50
+    @pytest.mark.parametrize('test_input,expected', [
+        (['https://rabota.by/search/vacancy?text=Python&page=0'], 50),
+        (['https://rabota.by/search/vacancy?text=ShotgunFFFFF&page=0'], 0),
+    ])
+    def test_urls_from_page_by_class(self, test_input, expected, request_headers, block_class):
+        urls_collector = UrlsCollector(test_input, request_headers, block_class)
+        assert len(urls_collector.urls_from_page_by_class(urls_collector.urls[0])) == expected
 
-    def test_collect_urls(self, urls_collector):
-        assert len(urls_collector.collect_urls()) == len(urls_collector.urls) * 50
+    @pytest.mark.parametrize('test_input,expected', [
+        (['https://rabota.by/search/vacancy?text=Python&page=0',
+          'https://rabota.by/search/vacancy?text=Python&page=1'], 100),
+        (['https://rabota.by/search/vacancy?text=ShotgunFFFFF&page=0'], 0),
+        (['https://rabota.by/search/vacancy?text=Python&page=0'], 50),
+    ])
+    def test_collect_urls(self, test_input, expected, request_headers, block_class):
+        urls_collector = UrlsCollector(test_input, request_headers, block_class,)
+        assert len(urls_collector.collect_urls()) == expected
