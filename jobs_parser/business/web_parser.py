@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 from business.parse_results import ParseResult, ParseResults
 from core.page_manager import Pages
+from core.soup_maker import SoupMaker
 
 module_logger = logging.getLogger('jobs_parser')
 
@@ -22,11 +23,7 @@ class WebParser:
         return self._web_content(page_file).get_text()
 
     def _web_content(self, page_file):
-        soup = BeautifulSoup(open(page_file.file_path, encoding='utf-8'), 'html.parser').body
-        for block_class in self.classes_to_exclude:
-            if found := soup.find('div', block_class):
-                found.decompose()
-        return soup
+        return SoupMaker(page_file).remove_from_soup(self.classes_to_exclude)
 
     def _findall_in_page(self, user_content: str):
         matched = []
