@@ -22,7 +22,7 @@ class WebParser:
         return self._web_content(page_file).get_text()
 
     def _web_content(self, page_file):
-        soup = BeautifulSoup(open(page_file.file_path), 'html.parser').body
+        soup = BeautifulSoup(open(page_file.file_path, encoding='utf-8'), 'html.parser').body
         for block_class in self.classes_to_exclude:
             if found := soup.find('div', block_class):
                 found.decompose()

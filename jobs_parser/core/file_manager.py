@@ -44,5 +44,5 @@ class PageFile(TmpManager):
         return True if os.path.exists(self.file_path) else False
 
     def save_file(self, data):
-        with open(self.file_path, 'w') as file:
+        with open(self.file_path, 'w', encoding='utf-8') as file:
             file.write(data)
