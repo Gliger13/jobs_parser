@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from core.page_manager import Pages, Page
+from core.soup_maker import SoupMaker
 
 module_logger = logging.getLogger('jobs_parser')
 
@@ -49,12 +50,7 @@ class UrlsCollector:
         self.block_class = block_class
 
     def urls_from_page_by_class(self, url):
-        page = Page(url, self.request_headers)
-        page_file = page.page_file()
-
-        soup = BeautifulSoup(open(page_file.file_path, encoding='utf-8'), 'html.parser').body
-
-        urls = soup.find_all('a', self.block_class, href=True)
+        urls = SoupMaker(Page(url, self.request_headers).page_file()).find_urls_by_class(self.block_class)
         module_logger.debug(f'Urls from the page {url} collected')
         return [url['href'] for url in urls]
 

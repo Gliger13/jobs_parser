@@ -10,6 +10,7 @@ logger.setLevel(logging.INFO)
 
 
 if __name__ == '__main__':
+    logger.debug('Some useless information')
     logger.info('Some information')
     logger.warning('Some warning')
     logger.error('Some error')
