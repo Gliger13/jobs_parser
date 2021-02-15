@@ -26,7 +26,7 @@ class PaginatorUrlsCollector:
 
     def page_urls(self, page_start, page_end):
         return [self.first_url_template.format(page_number=page_number) for page_number in range(page_start, page_end)]
-        
+
     def valid_paginator_urls(self, page_start=0, page_end=None):
         module_logger.info('Collecting urls from paginator. Checking for page existence')
         if not page_end:
@@ -52,7 +52,7 @@ class UrlsCollector:
         page = Page(url, self.request_headers)
         page_file = page.page_file()
 
-        soup = BeautifulSoup(open(page_file.file_path), 'html.parser').body
+        soup = BeautifulSoup(open(page_file.file_path, encoding='utf-8'), 'html.parser').body
 
         urls = soup.find_all('a', self.block_class, href=True)
         module_logger.debug(f'Urls from the page {url} collected')
