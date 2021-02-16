@@ -60,7 +60,7 @@ class ParseResults:
         return {word: self.count_word_occurrence(word) for word in self.words_to_find}
 
     def average_num_of_word_occur(self, word):
-        return round(self.count_word_occurrence(word) / len(self.urls), 2)
+        return round(self.count_word_occurrence(word) / len(self.urls), 2) if len(self.urls) else 0
 
     def average_num_of_words_occur(self) -> dict:
         return {word: self.average_num_of_word_occur(word) for word in self.words_to_find}
