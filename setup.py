@@ -11,7 +11,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='jobs_parser',
-    version='1.0.0',
+    version='1.1.1',
     description='Parser of jobs.by',
     long_description=open(join(dirname(__file__), 'README.md')).read(),
     author='Andrei Zaneuski',
