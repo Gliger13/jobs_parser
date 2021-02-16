@@ -38,10 +38,7 @@ class TestWebParser:
         ['https://rabota.by/search/vacancy?text=Python&page=0', 'https://rabota.by/search/vacancy?text=Python&page=1'],
     ])
     def test_average_occurrence(self, test_input, block_class, classes_to_exclude, request_headers):
-        urls = UrlsCollector(test_input, request_headers, block_class).collect_urls()
+        urls = UrlsCollector(test_input, block_class, request_headers).collect_urls()
         parse_results = WebParser(urls, ['Linux', 'Python', 'Flask'], classes_to_exclude, request_headers).parse()
         average_results = parse_results.average_num_of_words_occur()
         assert all([5 >= number >= 0.10 for number in average_results.values()])
-
-
-
