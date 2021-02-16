@@ -47,7 +47,7 @@ class TestUrlsCollector:
         (['https://rabota.by/search/vacancy?text=ShotgunFFFFF&page=0'], 0),
     ])
     def test_urls_from_page_by_class(self, test_input, expected, request_headers, block_class):
-        urls_collector = UrlsCollector(test_input, request_headers, block_class)
+        urls_collector = UrlsCollector(test_input, block_class, request_headers)
         assert len(urls_collector.urls_from_page_by_class(urls_collector.urls[0])) == expected
 
     @pytest.mark.smoke
@@ -58,5 +58,5 @@ class TestUrlsCollector:
         (['https://rabota.by/search/vacancy?text=Python&page=0'], 50),
     ])
     def test_collect_urls(self, test_input, expected, request_headers, block_class):
-        urls_collector = UrlsCollector(test_input, request_headers, block_class,)
+        urls_collector = UrlsCollector(test_input, block_class, request_headers)
         assert len(urls_collector.collect_urls()) == expected

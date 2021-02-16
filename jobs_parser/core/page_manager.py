@@ -8,11 +8,21 @@ module_logger = logging.getLogger('jobs_parser')
 
 
 class Request:
-    def __init__(self, url, headers):
+    """
+    Responsible for requests and handling their errors
+
+    Parameters
+    ----------
+    url: str
+        URL to which the request will be sent
+    headers: bool, optional
+        The headers of request
+    """
+    def __init__(self, url: str, headers: dict = None):
         self.url = url
         self.headers = headers
 
-    def error_handling(self, response):
+    def error_handling(self, response: requests.Response):
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError:
@@ -24,25 +34,35 @@ class Request:
         except requests.exceptions.RequestException:
             module_logger.warning(f'RequestException. Page with url {self.url} was skipped')
 
-    def get(self):
+    def get(self) -> requests.Response:
         return resp if (resp := requests.get(self.url, headers=self.headers)).ok else self.error_handling(resp)
 
-    def head(self):
+    def head(self) -> requests.Response:
         return requests.head(self.url, headers=self.headers)
 
 
 class Page:
-    def __init__(self, url, request_headers=None):
+    """
+    Responsible for the existence and receipt of the page
+
+    Parameters
+    ----------
+    url: str
+        URL of the page to be processed
+    request_headers: dict, optional
+        The headers of request
+    """
+    def __init__(self, url: str, request_headers: dict = None):
         self.url = url
         self.request_headers = request_headers
 
-    def is_page_exist(self):
+    def is_page_exist(self) -> bool:
         return Request(self.url, self.request_headers).head().ok
 
-    def get_page(self):
+    def get_page(self) -> str or None:
         return Request(self.url, self.request_headers).get().text if self.is_page_exist() else None
 
-    def page_file(self):
+    def page_file(self) -> PageFile:
         page_file = PageFile(self.url)
         if not page_file.is_file_exist():
             page = Page(self.url, self.request_headers)
@@ -56,13 +76,23 @@ class Page:
 
 
 class Pages:
-    def __init__(self, urls, request_headers=None):
+    """
+    Processes multiple pages
+
+    Parameters
+    ----------
+    urls: [str]
+        Contains the URL of the pages to be processed
+    request_headers: dict, optional
+        The headers of request
+    """
+    def __init__(self, urls: [str], request_headers: dict = None):
         self.urls = urls
         self.request_headers = request_headers
 
-    def is_pages_exist(self):
+    def is_pages_exist(self) -> bool:
         return all(map(Page.is_page_exist, [Page(url, self.request_headers) for url in self.urls]))
 
-    def get_files(self):
+    def get_files(self) -> [PageFile]:
         page_files = [Page(url, self.request_headers).page_file() for url in self.urls]
         return [page_file for page_file in page_files if page_file.is_file_exist()]
