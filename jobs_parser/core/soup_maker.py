@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from core.file_manager import PageFile
+from .file_manager import PageFile
 
 
 class SoupMaker:

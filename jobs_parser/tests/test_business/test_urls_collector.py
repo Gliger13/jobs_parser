@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-from business.urls_collector import PaginatorUrlsCollector, UrlsCollector
+from jobs_parser.business.urls_collector import PaginatorUrlsCollector, UrlsCollector
 
 
 @pytest.fixture(params=[

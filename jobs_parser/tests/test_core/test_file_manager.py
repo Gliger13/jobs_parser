@@ -1,6 +1,6 @@
 import pytest
 
-from core.file_manager import PageFile, TmpManager
+from jobs_parser.core.file_manager import PageFile, TmpManager
 
 
 @pytest.fixture(autouse=True)

@@ -1,7 +1,7 @@
 import pytest
 
-from business.urls_collector import UrlsCollector
-from business.web_parser import WebParser
+from jobs_parser.business.urls_collector import UrlsCollector
+from jobs_parser.business.web_parser import WebParser
 
 
 class TestWebParser:

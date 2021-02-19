@@ -2,7 +2,7 @@ import logging
 
 import requests
 
-from core.file_manager import PageFile
+from .file_manager import PageFile
 
 module_logger = logging.getLogger('jobs_parser')
 

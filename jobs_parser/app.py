@@ -1,7 +1,7 @@
-from business.parse_results import ParseResults
-from business.urls_collector import UrlsCollector, PaginatorUrlsCollector
-from business.web_parser import WebParser
-from settings import logger
+from jobs_parser.business.parse_results import ParseResults
+from jobs_parser.business.urls_collector import UrlsCollector, PaginatorUrlsCollector
+from jobs_parser.business.web_parser import WebParser
+from jobs_parser.settings import logger
 
 
 def parse_required(func):

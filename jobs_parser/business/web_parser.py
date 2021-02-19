@@ -3,10 +3,10 @@ import re
 
 from bs4 import BeautifulSoup
 
-from business.parse_results import ParseResult, ParseResults
-from core.file_manager import PageFile
-from core.page_manager import Pages
-from core.soup_maker import SoupMaker
+from jobs_parser.core.file_manager import PageFile
+from jobs_parser.core.page_manager import Pages
+from jobs_parser.core.soup_maker import SoupMaker
+from .parse_results import ParseResult, ParseResults
 
 module_logger = logging.getLogger('jobs_parser')
 

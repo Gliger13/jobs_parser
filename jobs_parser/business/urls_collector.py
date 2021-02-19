@@ -3,8 +3,8 @@ import logging
 
 import requests
 
-from core.page_manager import Pages, Page
-from core.soup_maker import SoupMaker
+from jobs_parser.core.page_manager import Pages, Page
+from jobs_parser.core.soup_maker import SoupMaker
 
 module_logger = logging.getLogger('jobs_parser')
 

@@ -1,6 +1,6 @@
 import pytest
 
-from core.page_manager import Page, Pages
+from jobs_parser.core.page_manager import Page, Pages
 
 
 @pytest.fixture(params=[

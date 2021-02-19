@@ -1,6 +1,6 @@
 import pytest
 
-from business.parse_results import ParseResult
+from jobs_parser.business.parse_results import ParseResult
 
 
 @pytest.mark.smoke
