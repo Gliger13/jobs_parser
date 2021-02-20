@@ -64,3 +64,10 @@ class ParseResults:
 
     def average_num_of_words_occur(self) -> dict:
         return {word: self.average_num_of_word_occur(word) for word in self.words_to_find}
+
+    def json(self) -> dict:
+        return {
+            'urls': self.urls,
+            'words_to_find': self.words_to_find,
+            'parse_results': self.count_words_occurrence(),
+        }
